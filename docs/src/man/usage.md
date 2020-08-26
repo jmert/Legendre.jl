@@ -206,18 +206,18 @@ The trait type [`LegendreUnitNorm`](@ref) dispatches internal functions to compu
 julia> legendre(LegendreUnitNorm(), 5, 2, 0.5) == Plm(5, 2, 0.5)
 true
 ```
- and [`LegendreSphereNorm`](@ref) does the same for ``\lambda_ℓ^m(x)``:
+ and [`LegendreOrthoSphereNorm`](@ref) does the same for ``\lambda_ℓ^m(x)``:
 ```jldoctest PlmUsage
-julia> legendre(LegendreSphereNorm(), 5, 2, 0.5) == λlm(5, 2, 0.5)
+julia> legendre(LegendreOrthoSphereNorm(), 5, 2, 0.5) == λlm(5, 2, 0.5)
 true
 ```
 
 The type [`LegendreNormCoeff`](@ref) stores the coefficients for a particular
 normalization (and value type) so that the coefficients must only be calculated once.
 Aliases for the unit and spherical normalizations are provided by default,
-[`LegendreUnitCoeff`](@ref) and [`LegendreSphereCoeff`](@ref) respectively.
+[`LegendreUnitCoeff`](@ref) and [`LegendreOrthoSphereCoeff`](@ref) respectively.
 ```jldoctest PlmUsage
-julia> coeff = LegendreSphereCoeff{Float64}(700);
+julia> coeff = LegendreOrthoSphereCoeff{Float64}(700);
 
 julia> legendre(coeff, 5, 2, 0.5)
 -0.15888479843070935

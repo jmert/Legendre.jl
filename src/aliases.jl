@@ -4,15 +4,23 @@
 Precomputed recursion relation coefficients for the standard unit
 normalization. Alias for `LegendreNormCoeff{LegendreUnitNorm,T}`.
 """
-LegendreUnitCoeff{T} = LegendreNormCoeff{LegendreUnitNorm,T}
+const LegendreUnitCoeff{T} = LegendreNormCoeff{LegendreUnitNorm,T}
 
 """
-    LegendreSphereCoeff{T}
+    LegendreOrthoSphereCoeff{T}
 
-Table type of precomputed recursion relation coefficients for the spherical
-harmonic normalization. Alias for `LegendreNormCoeff{LegendreSphereNorm,T}`.
+Table type of precomputed recursion relation coefficients for the orthonormal spherical
+harmonic normalization. Alias for `LegendreNormCoeff{LegendreOrthoSphereNorm,T}`.
 """
-LegendreSphereCoeff{T} = LegendreNormCoeff{LegendreSphereNorm,T}
+const LegendreOrthoSphereCoeff{T} = LegendreNormCoeff{LegendreOrthoSphereNorm,T}
+
+"""
+    LegendreFourPiSphereCoeff{T}
+
+Table type of precomputed recursion relation coefficients for the ``4\\pi`` spherical
+harmonic normalization. Alias for `LegendreNormCoeff{LegendreFourPiSphereNorm,T}`.
+"""
+const LegendreFourPiSphereCoeff{T} = LegendreNormCoeff{LegendreFourPiSphereNorm,T}
 
 """
     p = Plm(l, m, x)
@@ -35,15 +43,15 @@ const Plm! = LegendreUnitNorm()
     λ = λlm(l, m, x)
 
 Computes the associated Legendre polynomials using spherical-harmonic normalization;
-equivalent to `λ = legendre(LegendreSphereNorm(), l, m, x)`.
+equivalent to `λ = legendre(LegendreOrthoSphereNorm(), l, m, x)`.
 """
-const λlm = LegendreSphereNorm()
+const λlm = LegendreOrthoSphereNorm()
 
 """
     λlm!(Λ, l, m, x)
 
 Fills the array `Λ` with the spherical-harmonic normalized associated Legendre polynomial
 values ``λ_ℓ^m(x)``;
-equivalent to `legendre!(LegendreSphereNorm(), P, l, m, x)`.
+equivalent to `legendre!(LegendreOrthoSphereNorm(), P, l, m, x)`.
 """
-const λlm! = LegendreSphereNorm()
+const λlm! = LegendreOrthoSphereNorm()

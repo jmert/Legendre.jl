@@ -153,7 +153,7 @@ normalization trait type as the first argument.
 up a type-stable algorithm, which we'll ignore here for the sake of simplicity.)
 ```jldoctest λNorm
 julia> initcond(::λNorm, T::Type) = sqrt(1 / 4π)
-initcond (generic function with 4 methods)
+initcond (generic function with 5 methods)
 ```
 Finally, we provide methods which encode the cofficients as well:
 ```jldoctest λNorm
@@ -162,20 +162,20 @@ julia> function coeff_α(::λNorm, T::Type, l::Integer, m::Integer)
            fac2 = 4*(l-1)^2 - 1
            return sqrt(fac1 * fac2)
        end
-coeff_α (generic function with 4 methods)
+coeff_α (generic function with 5 methods)
 
 julia> function coeff_β(::λNorm, T::Type, l::Integer, m::Integer)
            fac1 = (2l + 1) / ((2l - 3) * (l^2 - m^2))
            fac2 = (l-1)^2 - m^2
            return sqrt(fac1 * fac2)
        end
-coeff_β (generic function with 4 methods)
+coeff_β (generic function with 5 methods)
 
 julia> coeff_μ(::λNorm, T::Type, l::Integer) = sqrt(1 + 1 / 2l)
-coeff_μ (generic function with 4 methods)
+coeff_μ (generic function with 5 methods)
 
 julia> coeff_ν(::λNorm, T::Type, l::Integer) = sqrt(1 + 2l)
-coeff_ν (generic function with 4 methods)
+coeff_ν (generic function with 5 methods)
 ```
 
 With just those 5 methods provided, the full Legendre framework is available,

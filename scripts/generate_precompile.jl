@@ -5,7 +5,7 @@ inf_timing = @snoopi tmin=0.005 begin
         s = T(0.5)
         v = collect(range(T(-0.5), T(0.5), length=5))
         Ptab = LegendreUnitCoeff{T}(I(2))
-        Λtab = LegendreSphereCoeff{T}(I(2))
+        Λtab = LegendreOrthoSphereCoeff{T}(I(2))
         # Scalar argument, single (ℓ,m)
         Plm(I(2), I(2), s)
         Ptab(I(2), I(2), s)
