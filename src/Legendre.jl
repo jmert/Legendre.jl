@@ -9,10 +9,13 @@ export AbstractLegendreNorm
 include("interface.jl")
 
 # Specific normalizations
-export LegendreUnitNorm,  LegendreSphereNorm,  LegendreNormCoeff,
-       LegendreUnitCoeff, LegendreSphereCoeff
+export LegendreNormCoeff,
+       LegendreUnitNorm, LegendreUnitCoeff,
+       LegendreOrthoSphereNorm, LegendreOrthoSphereCoeff,
+       LegendreFourPiSphereNorm, LegendreFourPiSphereCoeff
 include("norm_unit.jl")
-include("norm_sphere.jl")
+include("norm_ortho.jl")
+include("norm_fourpi.jl")
 include("norm_table.jl")
 
 export legendre, legendre!
@@ -25,4 +28,10 @@ include("broadcasting.jl")
 
 include("precompile.jl")
 _precompile_()
+
+## Deprecations in v0.3
+Base.@deprecate_binding LegendreSphereNorm LegendreOrthoSphereNorm
+Base.@deprecate_binding LegendreSphereCoeff LegendreOrthoSphereCoeff
+## End v0.3 deprecations
+
 end # module Legendre

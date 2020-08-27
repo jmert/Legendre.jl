@@ -1,15 +1,15 @@
-# Implements the legendre interface for the unit normalization case
+# Implements the legendre interface for the orthnormal spherical-harmonic normalization case
 
 """
-    struct LegendreSphereNorm <: AbstractLegendreNorm end
+    struct LegendreOrthoSphereNorm <: AbstractLegendreNorm end
 
-Trait type denoting the spherical-harmonic normalization of the associated Legendre
-polynomials.
+Trait type denoting the orthonormal spherical-harmonic normalization of the associated
+Legendre polynomials.
 """
-struct LegendreSphereNorm <: AbstractLegendreNorm end
+struct LegendreOrthoSphereNorm <: AbstractLegendreNorm end
 
 @inline function
-initcond(::LegendreSphereNorm, ::Type{T}) where T
+initcond(::LegendreOrthoSphereNorm, ::Type{T}) where T
     # comparing this against
     #   convert(T, inv(sqrt(4*convert(BigFloat, π))))
     # shows that this is exact within Float64 precision
@@ -17,7 +17,7 @@ initcond(::LegendreSphereNorm, ::Type{T}) where T
 end
 
 @inline function
-coeff_μ(::LegendreSphereNorm, ::Type{T}, l::Integer) where T
+coeff_μ(::LegendreOrthoSphereNorm, ::Type{T}, l::Integer) where T
     # The direct derivation of the normalization constant gives
     #     return sqrt(one(T) + inv(convert(T, 2l)))
     # but when comparing results for T ∈ (Float64,BigFloat), the Float64 results differ by
@@ -46,12 +46,12 @@ coeff_μ(::LegendreSphereNorm, ::Type{T}, l::Integer) where T
 end
 
 @inline function
-coeff_ν(::LegendreSphereNorm, ::Type{T}, l::Integer) where T
+coeff_ν(::LegendreOrthoSphereNorm, ::Type{T}, l::Integer) where T
     return @fastmath(sqrt)(convert(T, 2l + 1))
 end
 
 @inline function
-coeff_α(::LegendreSphereNorm, ::Type{T}, l::Integer, m::Integer) where T
+coeff_α(::LegendreOrthoSphereNorm, ::Type{T}, l::Integer, m::Integer) where T
     lT = convert(T, l)
     mT = convert(T, m)
     # Write factors in two pieces to make compiler's job easier. In the case where
@@ -63,7 +63,7 @@ coeff_α(::LegendreSphereNorm, ::Type{T}, l::Integer, m::Integer) where T
 end
 
 @inline function
-coeff_β(::LegendreSphereNorm, ::Type{T}, l::Integer, m::Integer) where T
+coeff_β(::LegendreOrthoSphereNorm, ::Type{T}, l::Integer, m::Integer) where T
     lT = convert(T, l)
     mT = convert(T, m)
     # Write factors in two pieces to make compiler's job easier. In the case where

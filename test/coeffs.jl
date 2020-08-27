@@ -6,10 +6,10 @@ import ..TestSuite
     TestSuite.runtests(LegendreUnitCoeff{BigFloat}(TestSuite.LMAX))
 
     @testset "Coefficient table conversion" begin
-        dtab = LegendreSphereCoeff{Float64}(10)
-        ftab = convert(LegendreSphereCoeff{Float32}, dtab)
+        dtab = LegendreOrthoSphereCoeff{Float64}(10)
+        ftab = convert(LegendreOrthoSphereCoeff{Float32}, dtab)
 
-        @test ftab isa LegendreSphereCoeff{Float32}
+        @test ftab isa LegendreOrthoSphereCoeff{Float32}
         @test ftab.α == Float32.(dtab.α)
         @test_throws MethodError convert(LegendreUnitCoeff{Float64}, dtab)
     end

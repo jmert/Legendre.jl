@@ -32,10 +32,13 @@ end
 # SPHERICAL HARMONIC NORMALIZED ASSOCIATED LEGENDRE FUNCTIONS
 ##############################################################
 
-# P_0^0 is constant. Verify the output is invariant for several inputs.
+# λ_0^0 is constant. Verify the output is invariant for several inputs.
 @testset "Constant P_0^0 ($T)" for T in NumTypes
-    @test @inferred(legendre(LegendreSphereNorm(), 0, 0, T(0.1))) isa T
-    @test all(legendre(LegendreSphereNorm(), 0, 0, z) == sqrt(inv(4T(π)))
+    @test @inferred(legendre(LegendreOrthoSphereNorm(), 0, 0, T(0.1))) isa T
+    @test @inferred(legendre(LegendreFourPiSphereNorm(), 0, 0, T(0.1))) isa T
+    @test all(legendre(LegendreOrthoSphereNorm(), 0, 0, z) == sqrt(inv(4T(π)))
+              for z in range(-one(T), one(T), length=10))
+    @test all(legendre(LegendreFourPiSphereNorm(), 0, 0, z) == one(T)
               for z in range(-one(T), one(T), length=10))
 end
 
@@ -72,7 +75,7 @@ end
 
     LMAX = 99
     Λ = fill(0.0, LMAX+1, LMAX+1)
-    legendre!(LegendreSphereNorm(), Λ, LMAX, LMAX, cosd(45.0))
+    legendre!(LegendreOrthoSphereNorm(), Λ, LMAX, LMAX, cosd(45.0))
 
     @test Λ[3,3]   ≈ SphericalPll_coeff(Float64,2)  / (2^1)
     @test Λ[4,4]   ≈ SphericalPll_coeff(Float64,3)  / (2^1 * sqrt(2))
@@ -82,7 +85,7 @@ end
     @test Λ[100,100] ≈ SphericalPll_coeff(Float64,99) / (2^49 * sqrt(2))
 end
 
-# The normal P_ℓ^m should be equal to the spherical harmonic normalized
+# The normal P_ℓ^m should be equal to the orthonormal spherical harmonic normalized
 # λ_ℓ^m if we manually normalize them.
 @testset "Equality of N_ℓ^m × P_ℓ^m and λ_ℓ^m ($T)" for T in NumTypes
     LMAX = 5
@@ -93,11 +96,29 @@ end
     lmat = tril(repeat(collect(0:LMAX), 1, LMAX+1))
     mmat = tril(repeat(collect(0:LMAX)', LMAX+1, 1))
     nlm = tril(Nlm.(T, lmat, mmat))
+    # TODO: replace rand() with repeatable choices
     for ii in 1:10
         x = 2*T(rand()) - 1
         legendre!(LegendreUnitNorm(), plm_norm, LMAX, LMAX, x)
-        legendre!(LegendreSphereNorm(), plm_sphr, LMAX, LMAX, x)
+        legendre!(LegendreOrthoSphereNorm(), plm_sphr, LMAX, LMAX, x)
         @test all(isapprox.(nlm.*plm_norm, plm_sphr, atol=atol))
+    end
+end
+
+# Likewise, the orthonormal and 4π-normalized functions should be the same up to the
+# differing factor of 1/√4π.
+@testset "Equality of λ_ℓ^m and λ′_ℓ^m/√4π ($T)" for T in NumTypes
+    LMAX = 5
+    atol = 10eps(one(T))
+    plm_ortho  = zeros(T, LMAX+1, LMAX+1)
+    plm_fourpi = zeros(T, LMAX+1, LMAX+1)
+    rtfourpi = sqrt(4 * convert(T, π))
+    # TODO: replace rand() with repeatable choices
+    for ii in 1:10
+        x = 2*T(rand()) - 1
+        legendre!(LegendreOrthoSphereNorm(),  plm_ortho,  LMAX, LMAX, x)
+        legendre!(LegendreFourPiSphereNorm(), plm_fourpi, LMAX, LMAX, x)
+        @test all(isapprox.(plm_ortho, plm_fourpi ./ rtfourpi, atol=atol))
     end
 end
 
@@ -131,7 +152,7 @@ end
     # PR#16
     #   Increase accuracy of μ coefficient for spherical norm.
     #   Also test ν, and both already equivalent for unit norm.
-    @testset "coeffs μ, ν ($norm)" for norm in (LegendreSphereNorm(), LegendreUnitNorm())
+    @testset "coeffs μ, ν ($norm)" for norm in (LegendreOrthoSphereNorm(), LegendreUnitNorm())
         lrng = 1:30_000
         μ(T, l) = Legendre.coeff_μ(norm, T, l)
         ν(T, l) = Legendre.coeff_ν(norm, T, l)
